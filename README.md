@@ -1,48 +1,31 @@
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Global News Hub</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <header>
-        <h1>Global News Hub</h1>
-        <nav>
-            <ul>
-                <li><a href="#" onclick="showSection('home')">Home</a></li>
-                <li><a href="#" onclick="showSection('world')">World</a></li>
-                <li><a href="#" onclick="showSection('technology')">Technology</a></li>
-                <li><a href="#" onclick="showSection('sports')">Sports</a></li>
-            </ul>
-        </nav>
-    </header>
+function App() {
+  const [articles, setArticles] = useState([]);
 
-    <main>
-        <section id="home" class="news-section active">
-            <h2>Latest Headlines</h2>
-            <div id="home-news" class="news-container"></div>
-        </section>
-        <section id="world" class="news-section">
-            <h2>World News</h2>
-            <div id="world-news" class="news-container"></div>
-        </section>
-        <section id="technology" class="news-section">
-            <h2>Technology News</h2>
-            <div id="technology-news" class="news-container"></div>
-        </section>
-        <section id="sports" class="news-section">
-            <h2>Sports News</h2>
-            <div id="sports-news" class="news-container"></div>
-        </section>
-    </main>
+  useEffect(() => {
+    // Example: Use a public news API
+    axios.get("https://newsapi.org/v2/top-headlines?country=us&apiKey=YOUR_API_KEY")
+      .then(response => setArticles(response.data.articles))
+      .catch(error => console.error(error));
+  }, []);
 
-    <footer>
-        <p>&copy; 2025 Global News Hub. All rights reserved.</p>
-    </footer>
+  return (
+    <div>
+      <h1>Latest News</h1>
+      <div>
+        {articles.map((article, idx) => (
+          <div key={idx} style={{ border: "1px solid #ccc", margin: "10px", padding: "10px" }}>
+            <h2>{article.title}</h2>
+            <img src={article.urlToImage} alt="" style={{ width: "100%" }} />
+            <p>{article.description}</p>
+            <a href={article.url} target="_blank" rel="noopener noreferrer">Read more</a>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
-    <script src="script.js"></script>
-</body>
-</html>
+export default App;
